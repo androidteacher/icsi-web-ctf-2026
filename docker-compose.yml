@@ -1,0 +1,329 @@
+# iCSI-Web-CTF — full environment
+# Generated from the live challenge set. Brings up CTFd (with all 68
+# challenges, flags, theme and admin baked into the app+db images) plus
+# every challenge container, all pulled from Docker Hub.
+#
+# Admin login: admin / admin   |   CTFd: http://<host>:8000
+
+services:
+
+  # ---- CTFd platform (data baked into these two images) ----
+  db:
+    image: joshbeck2024/2026-icsi-web-ctf-1-db:latest
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ctfd
+      MARIADB_DATABASE: ctfd
+      MARIADB_USER: ctfd
+      MARIADB_PASSWORD: ctfd
+    healthcheck:
+      test: ["CMD","healthcheck.sh","--connect","--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 40
+
+  ctfd:
+    image: joshbeck2024/2026-icsi-web-ctf-1:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=mysql+pymysql://ctfd:ctfd@db/ctfd
+      - SECRET_KEY=icsi-web-ctf-secret-key-2026
+      - WORKERS=2
+      - REVERSE_PROXY=true
+    ports:
+      - "8000:8000"
+
+  # ---- Challenge containers (45) ----
+  ctf-chacha_challenge:
+    image: joshbeck2024/ctf-chacha_challenge:latest
+    restart: unless-stopped
+    ports:
+      - "3333:3333"
+
+  ctf-ping-command-injection:
+    image: joshbeck2024/ctf-ping-command-injection:latest
+    restart: unless-stopped
+    ports:
+      - "3666:5000"
+
+  bacon_ctf:
+    image: joshbeck2024/bacon_ctf:latest
+    restart: unless-stopped
+    ports:
+      - "9090:80"
+
+  brute_login_ctf:
+    image: joshbeck2024/brute_login_ctf:latest
+    restart: unless-stopped
+    ports:
+      - "9898:80"
+
+  front-end-bypass-challenge:
+    image: joshbeck2024/front-end-bypass-challenge:latest
+    restart: unless-stopped
+    ports:
+      - "9020:80"
+
+  cookie_bot-ctf-challenge:
+    image: joshbeck2024/cookie_bot-ctf-challenge:latest
+    restart: unless-stopped
+    ports:
+      - "3005:3005"
+
+  cookie_guessing:
+    image: joshbeck2024/cookie_guessing:latest
+    restart: unless-stopped
+    ports:
+      - "9797:80"
+
+  ctf-sql-2:
+    image: joshbeck2024/ctf-sql-2:latest
+    restart: unless-stopped
+    ports:
+      - "9088:80"
+
+  cors_ctf_challenge:
+    image: joshbeck2024/cors_ctf_challenge:latest
+    restart: unless-stopped
+    ports:
+      - "9003:80"
+
+  403-bypass-ctf:
+    image: joshbeck2024/403-bypass-ctf:latest
+    restart: unless-stopped
+    ports:
+      - "3030:3030"
+
+  ctf-alphabet-soup:
+    image: joshbeck2024/ctf-alphabet-soup:latest
+    restart: unless-stopped
+    ports:
+      - "3777:5000"
+
+  ctf-ascii-rev:
+    image: joshbeck2024/ctf-ascii-rev:latest
+    restart: unless-stopped
+    ports:
+      - "3111:3111"
+
+  ctf-zone-transfer:
+    image: joshbeck2024/ctf-zone-transfer:latest
+    restart: unless-stopped
+    ports:
+      - "5454:53"
+      - "5454:53/udp"
+      - "5555:80"
+
+  ctf-json-post:
+    image: joshbeck2024/ctf-json-post:latest
+    restart: unless-stopped
+    ports:
+      - "5666:80"
+
+  ctf-api-fuzzing:
+    image: joshbeck2024/ctf-api-fuzzing:latest
+    restart: unless-stopped
+    ports:
+      - "3010:3000"
+
+  ctf-php-filter:
+    image: joshbeck2024/ctf-php-filter:latest
+    restart: unless-stopped
+    ports:
+      - "3444:80"
+
+  ctf-redirection-challenge:
+    image: joshbeck2024/ctf-redirection-challenge:latest
+    restart: unless-stopped
+    ports:
+      - "3999:80"
+
+  ctf-ssti:
+    image: joshbeck2024/ctf-ssti:latest
+    restart: unless-stopped
+    ports:
+      - "5777:5000"
+
+  ctf-rev-shell-mime-type:
+    image: joshbeck2024/ctf-rev-shell-mime-type:latest
+    restart: unless-stopped
+    ports:
+      - "9055:80"
+
+  ctf-aws-metadata:
+    image: joshbeck2024/ctf-aws-metadata:latest
+    restart: unless-stopped
+    ports:
+      - "3888:5000"
+
+  git_challenge:
+    image: joshbeck2024/git_challenge:latest
+    restart: unless-stopped
+    ports:
+      - "9030:80"
+
+  ctf_google_form:
+    image: joshbeck2024/ctf_google_form:latest
+    restart: unless-stopped
+    ports:
+      - "9696:80"
+
+  ctf_javascript_number_guessing:
+    image: joshbeck2024/ctf_javascript_number_guessing:latest
+    restart: unless-stopped
+    ports:
+      - "9035:9040"
+
+  js_flag_1:
+    image: joshbeck2024/js_flag_1:latest
+    restart: unless-stopped
+    ports:
+      - "9005:80"
+
+  jwt-ctf-challenge:
+    image: joshbeck2024/jwt-ctf-challenge:latest
+    restart: unless-stopped
+    ports:
+      - "9070:80"
+
+  ctf-xss-admin-bot:
+    image: joshbeck2024/ctf-xss-admin-bot:latest
+    restart: unless-stopped
+    ports:
+      - "3555:3555"
+
+  magic-method-ctf:
+    image: joshbeck2024/magic-method-ctf:latest
+    restart: unless-stopped
+    ports:
+      - "3020:3020"
+
+  simple_math_ctf:
+    image: joshbeck2024/simple_math_ctf:latest
+    restart: unless-stopped
+    ports:
+      - "9050:9050"
+
+  ctf_negative_equity:
+    image: joshbeck2024/ctf_negative_equity:latest
+    restart: unless-stopped
+    ports:
+      - "9099:80"
+
+  notes-api:
+    image: joshbeck2024/notes-api:latest
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+
+  numberizer:
+    image: joshbeck2024/numberizer:latest
+    restart: unless-stopped
+    ports:
+      - "9007:80"
+
+  # pivot1 is the entry point (published SSH/HTTP); pivot2 is reachable only
+  # across the isolated 10.0.0.0/24 network — participants must pivot through
+  # pivot1 to reach pivot2 at 10.0.0.26. Static IPs/subnet match the original.
+  pivot1:
+    image: joshbeck2024/pivot1:latest
+    restart: unless-stopped
+    ports:
+      - "5888:80"
+      - "5889:22"
+    networks:
+      pivot_internal:
+        ipv4_address: 10.0.0.10
+
+  pivot2:
+    image: joshbeck2024/pivot2:latest
+    restart: unless-stopped
+    networks:
+      pivot_internal:
+        ipv4_address: 10.0.0.26
+
+  ctf_local-xxe:
+    image: joshbeck2024/ctf_local-xxe:latest
+    restart: unless-stopped
+    ports:
+      - "9045:80"
+
+  python_digit_challenge:
+    image: joshbeck2024/python_digit_challenge:latest
+    restart: unless-stopped
+    ports:
+      - "90:80"
+      - "1337:1337"
+
+  quack2-web:
+    image: joshbeck2024/quack2-web:latest
+    restart: unless-stopped
+    ports:
+      - "100:80"
+
+  python_revstring_ctf:
+    image: joshbeck2024/python_revstring_ctf:latest
+    restart: unless-stopped
+    ports:
+      - "9060:9060"
+
+  robots_ctf:
+    image: joshbeck2024/robots_ctf:latest
+    restart: unless-stopped
+    ports:
+      - "9040:80"
+
+  sql-injection-chal-package-search:
+    image: joshbeck2024/sql-injection-chal-package-search:latest
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+
+  ctf-wireshark-login:
+    image: joshbeck2024/ctf-wireshark-login:latest
+    restart: unless-stopped
+    ports:
+      - "3222:5000"
+
+  cve-2011-2523:
+    image: joshbeck2024/cve-2011-2523:latest
+    restart: unless-stopped
+    ports:
+      - "6200:6200"
+      - "9077:21"
+
+  ctf_websockets_challenge:
+    image: joshbeck2024/ctf_websockets_challenge:latest
+    restart: unless-stopped
+    ports:
+      - "5055:3000"
+
+  ctf-prototype-pollution:
+    image: joshbeck2024/ctf-prototype-pollution:latest
+    restart: unless-stopped
+    ports:
+      - "9066:3000"
+
+  xxe-challenge:
+    image: joshbeck2024/xxe-challenge:latest
+    restart: unless-stopped
+    ports:
+      - "9001:80"
+
+  zipslip:
+    image: joshbeck2024/zipslip:latest
+    restart: unless-stopped
+    ports:
+      - "9006:9006"
+
+# Isolated network for the pivot challenge (everything else uses the default
+# project network). Mirrors the original subnet and static addressing.
+networks:
+  pivot_internal:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/24
