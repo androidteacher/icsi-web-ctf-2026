@@ -1,0 +1,96 @@
+# iCSI-Web-CTF — Part 3 of 3
+# Start parts in order (see README.md). Splitting the pulls keeps each
+# step under Docker Hub's unauthenticated pull rate limit.
+
+services:
+  ctf_negative_equity:
+    image: joshbeck2024/ctf_negative_equity:latest
+    restart: unless-stopped
+    ports:
+      - "9099:80"
+
+  notes-api:
+    image: joshbeck2024/notes-api:latest
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+
+  numberizer:
+    image: joshbeck2024/numberizer:latest
+    restart: unless-stopped
+    ports:
+      - "9007:80"
+
+  ctf_local-xxe:
+    image: joshbeck2024/ctf_local-xxe:latest
+    restart: unless-stopped
+    ports:
+      - "9045:80"
+
+  python_digit_challenge:
+    image: joshbeck2024/python_digit_challenge:latest
+    restart: unless-stopped
+    ports:
+      - "90:80"
+      - "1337:1337"
+
+  quack2-web:
+    image: joshbeck2024/quack2-web:latest
+    restart: unless-stopped
+    ports:
+      - "100:80"
+
+  python_revstring_ctf:
+    image: joshbeck2024/python_revstring_ctf:latest
+    restart: unless-stopped
+    ports:
+      - "9060:9060"
+
+  robots_ctf:
+    image: joshbeck2024/robots_ctf:latest
+    restart: unless-stopped
+    ports:
+      - "9040:80"
+
+  sql-injection-chal-package-search:
+    image: joshbeck2024/sql-injection-chal-package-search:latest
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+
+  ctf-wireshark-login:
+    image: joshbeck2024/ctf-wireshark-login:latest
+    restart: unless-stopped
+    ports:
+      - "3222:5000"
+
+  cve-2011-2523:
+    image: joshbeck2024/cve-2011-2523:latest
+    restart: unless-stopped
+    ports:
+      - "6200:6200"
+      - "9077:21"
+
+  ctf_websockets_challenge:
+    image: joshbeck2024/ctf_websockets_challenge:latest
+    restart: unless-stopped
+    ports:
+      - "5055:3000"
+
+  ctf-prototype-pollution:
+    image: joshbeck2024/ctf-prototype-pollution:latest
+    restart: unless-stopped
+    ports:
+      - "9066:3000"
+
+  xxe-challenge:
+    image: joshbeck2024/xxe-challenge:latest
+    restart: unless-stopped
+    ports:
+      - "9001:80"
+
+  zipslip:
+    image: joshbeck2024/zipslip:latest
+    restart: unless-stopped
+    ports:
+      - "9006:9006"

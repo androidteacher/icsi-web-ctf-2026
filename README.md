@@ -1,16 +1,20 @@
 # iCSI-Web-CTF
 
-This repository contains a single `docker-compose.yml` that stands up the entire
-**iCSI-Web-CTF** environment: the CTFd scoring platform (with all challenges,
-flags, theme, pages, and the admin account already baked into the images) plus
-every individual web-challenge container.
+This repository stands up the entire **iCSI-Web-CTF** environment: the CTFd
+scoring platform (with all challenges, flags, theme, pages, and the admin
+account already baked into the images) plus every individual web-challenge
+container.
 
-> ⚠️ **Heads up:** this compose file starts **about 50 containers**. Plan your
-> host accordingly.
+> ⚠️ **Heads up:** this environment runs **about 50 containers** in total.
+
+The services are split across **three Compose files** that are started **in
+order**. This keeps the number of images pulled in any single step well under
+Docker Hub's **unauthenticated pull rate limit** (pulling all ~50 at once will
+trip the limit).
 
 ## Requirements
 
-- A **Kali Linux** machine (the challenges and hosts-file instructions assume Kali).
+- A **Kali Linux** machine (challenges and the hosts-file instructions assume Kali).
 - At least **8 GB of RAM**.
 - Internet access on first run (all images are pulled from Docker Hub).
 
@@ -23,15 +27,36 @@ sudo apt install docker.io docker-compose
 
 ## 2. Start the environment
 
-Once the `docker-compose.yml` file has been downloaded, from the folder that
-contains it, run:
+The easiest way is the included `start_env.sh` script, which starts all three
+Compose files **in order**, waiting for each to finish (and for CTFd to come up)
+before starting the next. From the folder that contains the files, run:
 
 ```bash
-docker-compose up -d
+chmod 777 start_env.sh
 ```
 
-The first launch will take a few minutes while ~50 images are pulled and the
-CTFd database initializes. You can watch progress with `docker-compose ps`.
+```bash
+./start_env.sh
+```
+
+- **Part 1** brings up the CTFd platform (database + web app) and the pivot
+  challenge; **parts 2 and 3** bring up the remaining challenges.
+
+### Manual alternative
+
+If you prefer to run the parts yourself, start them **one at a time, in this
+order**, letting each finish before the next:
+
+```bash
+docker-compose -p ctf1 -f docker-compose.part1.yml up -d
+docker-compose -p ctf2 -f docker-compose.part2.yml up -d
+docker-compose -p ctf3 -f docker-compose.part3.yml up -d
+```
+
+> **If you hit a pull rate-limit error** (`toomanyrequests` / "pull rate limit"),
+> either wait a little while before running the next part, **or** run
+> `docker login` with a free Docker Hub account (which raises the limit) and then
+> continue with the next file.
 
 ## 3. Access the CTF
 
@@ -50,8 +75,12 @@ The admin credentials for the web interface are:
 
 ## Stopping
 
+Bring the parts down the same way they were started:
+
 ```bash
-docker-compose down
+docker-compose -p ctf1 -f docker-compose.part1.yml down
+docker-compose -p ctf2 -f docker-compose.part2.yml down
+docker-compose -p ctf3 -f docker-compose.part3.yml down
 ```
 
 ---

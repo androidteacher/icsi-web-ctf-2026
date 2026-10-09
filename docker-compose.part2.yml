@@ -1,0 +1,102 @@
+# iCSI-Web-CTF — Part 2 of 3
+# Start parts in order (see README.md). Splitting the pulls keeps each
+# step under Docker Hub's unauthenticated pull rate limit.
+
+services:
+  ctf-zone-transfer:
+    image: joshbeck2024/ctf-zone-transfer:latest
+    restart: unless-stopped
+    ports:
+      - "5454:53"
+      - "5454:53/udp"
+      - "5555:80"
+
+  ctf-json-post:
+    image: joshbeck2024/ctf-json-post:latest
+    restart: unless-stopped
+    ports:
+      - "5666:80"
+
+  ctf-api-fuzzing:
+    image: joshbeck2024/ctf-api-fuzzing:latest
+    restart: unless-stopped
+    ports:
+      - "3010:3000"
+
+  ctf-php-filter:
+    image: joshbeck2024/ctf-php-filter:latest
+    restart: unless-stopped
+    ports:
+      - "3444:80"
+
+  ctf-redirection-challenge:
+    image: joshbeck2024/ctf-redirection-challenge:latest
+    restart: unless-stopped
+    ports:
+      - "3999:80"
+
+  ctf-ssti:
+    image: joshbeck2024/ctf-ssti:latest
+    restart: unless-stopped
+    ports:
+      - "5777:5000"
+
+  ctf-rev-shell-mime-type:
+    image: joshbeck2024/ctf-rev-shell-mime-type:latest
+    restart: unless-stopped
+    ports:
+      - "9055:80"
+
+  ctf-aws-metadata:
+    image: joshbeck2024/ctf-aws-metadata:latest
+    restart: unless-stopped
+    ports:
+      - "3888:5000"
+
+  git_challenge:
+    image: joshbeck2024/git_challenge:latest
+    restart: unless-stopped
+    ports:
+      - "9030:80"
+
+  ctf_google_form:
+    image: joshbeck2024/ctf_google_form:latest
+    restart: unless-stopped
+    ports:
+      - "9696:80"
+
+  ctf_javascript_number_guessing:
+    image: joshbeck2024/ctf_javascript_number_guessing:latest
+    restart: unless-stopped
+    ports:
+      - "9035:9040"
+
+  js_flag_1:
+    image: joshbeck2024/js_flag_1:latest
+    restart: unless-stopped
+    ports:
+      - "9005:80"
+
+  jwt-ctf-challenge:
+    image: joshbeck2024/jwt-ctf-challenge:latest
+    restart: unless-stopped
+    ports:
+      - "9070:80"
+
+  ctf-xss-admin-bot:
+    image: joshbeck2024/ctf-xss-admin-bot:latest
+    restart: unless-stopped
+    ports:
+      - "3555:3555"
+
+  magic-method-ctf:
+    image: joshbeck2024/magic-method-ctf:latest
+    restart: unless-stopped
+    ports:
+      - "3020:3020"
+
+  simple_math_ctf:
+    image: joshbeck2024/simple_math_ctf:latest
+    restart: unless-stopped
+    ports:
+      - "9050:9050"
